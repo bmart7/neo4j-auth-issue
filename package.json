@@ -1,0 +1,57 @@
+{
+  "name": "<PROJECT_NAME>",
+  "version": "0.0.1",
+  "description": "",
+  "type": "module",
+  "license": "AGPL-version-3.0",
+  "private": false,
+  "engines": {
+    "node": ">= 14.0.0",
+    "npm": ">= 6.0.0"
+  },
+  "homepage": "",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "bugs": "",
+  "keywords": [],
+  "author": "BMart",
+  "contributors": [],
+  "scripts": {
+    "build": "tsc",
+    "dev": "npx dotenv -e .env.development -- tsx watch src/index.ts",
+    "start": "node ./dist/index.js",
+    "up-build": "docker-compose up --build -d",
+    "up": "docker-compose up -d",
+    "down": "docker-compose down",
+    "restart-server": "docker-compose restart server",
+    "logs": "docker-compose logs --tail 100 --follow",
+    "logs-server": "docker-compose logs server --tail 100 --follow",
+    "logs-db": "docker-compose logs neo4j --tail 100 --follow",
+    "format": "prettier --write .",
+    "lint": "eslint src --color --fix",
+    "lint-staged": "lint-staged --config .lint-staged.cjs",
+    "prepare": "node ./.husky/install.mjs",
+    "check-types": "tsc --noEmit --skipLibCheck",
+    "reset-db": "source .env.development && docker-compose exec -it neo4j cypher-shell -u neo4j -p $DB_PASSWORD \"\"\"MATCH (n) DETACH DELETE n\"\"\"",
+    "shell-dev": "docker compose exec -it server npx dotenv -e .env.development -- npx tsx src/scripts/repl.ts"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.10.4",
+    "@neo4j/graphql": "^5.4.3",
+    "@neo4j/graphql-ogm": "^5.4.3",
+    "graphql": "^16.9.0",
+    "neo4j-driver": "^5.21.0"
+  },
+  "devDependencies": {
+    "@graphql-eslint/eslint-plugin": "^3.20.1",
+    "@typescript-eslint/eslint-plugin": "^7.13.1",
+    "dotenv-cli": "^7.4.2",
+    "eslint": "^8.57.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.7",
+    "prettier": "^3.3.2",
+    "tsx": "^4.15.7"
+  }
+}
