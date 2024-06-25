@@ -1,11 +1,9 @@
 import {ApolloServer} from '@apollo/server'
 import {Neo4jGraphQL} from '@neo4j/graphql'
 import neo4j from 'neo4j-driver'
-import {typeDefs as nodeTypeDefs, resolvers as nodeResolvers} from 'nodes'
+import {typeDefs as nodeTypeDefs} from 'nodes'
 import {ContextValue} from 'types'
 import GraphqlOGM from '@neo4j/graphql-ogm'
-// Uncomment the following line and update instances of `OGM` to `OGM<ModelMap>` after generating types
-// import {ModelMap} from '__generated__/types'
 
 const {OGM} = GraphqlOGM
 export const IS_DEV = process.env.NODE_ENV === 'development'
@@ -20,14 +18,11 @@ export const driver = neo4j.driver(
 
 const typeDefs = [nodeTypeDefs]
 
-const resolvers = [nodeResolvers]
-
-export const ogm = new OGM({typeDefs, driver, resolvers})
+export const ogm = new OGM({typeDefs, driver})
 await ogm.init()
 
 export const neoSchema = new Neo4jGraphQL({
   typeDefs,
-  resolvers,
   driver,
   debug: IS_DEV,
   ...(process.env.JWT_SECRET && {
